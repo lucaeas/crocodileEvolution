@@ -1,1 +1,2 @@
-1
+
+        if event.type == pygame.MOUSEMOTION:
