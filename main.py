@@ -15,29 +15,30 @@ spawnTime = time.time()
 limitTime = time.time()
 globalMoney = 0
 font = pygame.font.SysFont("Arial", 24)
-img = font.render(f'Money : {globalMoney}', True, (0,0,0))
+img = font.render(f'Money : {globalMoney}', True, (255,255,255))
 activecroco = None
 limit = 5
-
+background = pygame.image.load("images/bg1.png")
 #-----------------------------------------------------------
 
 while running:
     
     #Check if there is any crocodile to spawn
     if time.time() - spawnTime >= 3 and len(listcroco) < limit:
-        listcroco.append(Crocodile(screen, 0,random.randint(50,718),random.randint(50,900),False))
+        listcroco.append(Crocodile(screen, 0,random.randint(50,718),random.randint(124,900),False))
         spawnTime = time.time()
 
-    screen.fill((108, 230, 106))
+
+    screen.blit(background, (0,-224))
 
     for croco in listcroco:
         if croco.type != 0:
             if time.time() - croco.ponte > 10:
                 globalMoney += croco.money()
-                img = font.render(f'Money : {globalMoney}', True, (0,0,0))
+                img = font.render(f'Money : {globalMoney}', True, (255,255,255))
                 croco.ponte = time.time()
         croco.draw()
-    screen.blit(img, (50,70))  
+    screen.blit(img, (50,20))  
     pygame.draw.rect(screen,(255,255,255),(0,900,768,224))
     pygame.display.flip()
 
@@ -55,15 +56,16 @@ while running:
                 elif position[0] >= e.x and position[0] <= e.x+100 and position[1] >= e.y and position[1] <= e.y+100 and e.isHatched():
                     activecroco = num
                     globalMoney += e.money()
-                    img = font.render(f'Money : {globalMoney}', True, (0,0,0))
+                    img = font.render(f'Money : {globalMoney}', True, (255,255,255))
 
         if event.type == pygame.MOUSEMOTION:
             
             if activecroco != None:
                 rectangleMotion = pygame.Rect(listcroco[activecroco].x,listcroco[activecroco].y,100,100)
-                rectangleMotion.move_ip(event.rel)
-                listcroco[activecroco].x = rectangleMotion.x
-                listcroco[activecroco].y = rectangleMotion.y
+                rectangleMotion.move_ip(event.rel) 
+                if rectangleMotion.y >= 124:
+                    listcroco[activecroco].x = rectangleMotion.x
+                    listcroco[activecroco].y = rectangleMotion.y
 
         if event.type == pygame.MOUSEBUTTONUP:
             position = event.pos
